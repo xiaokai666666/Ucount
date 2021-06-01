@@ -17,11 +17,11 @@ public class Calculator {
         hasDot = false;
     }
 
-    public void setMoney (String money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
-    public void setHasDot (boolean hasDot) {
+    public void setHasDot(boolean hasDot) {
         this.hasDot = hasDot;
     }
 
@@ -37,8 +37,9 @@ public class Calculator {
         if (!hasDot()) return 2;
 
         int cnt = 2;
-        for (int i = money.length()-1; i >= 0; --i) {
-            if (money.charAt(i) == '.') break;;
+        for (int i = money.length() - 1; i >= 0; --i) {
+            if (money.charAt(i) == '.') break;
+            ;
             cnt--;
         }
         return max(cnt, 0);
