@@ -1,21 +1,10 @@
 package com.yuukidach.ucount;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
-
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yuukidach.ucount.view.adapter.BookItemAdapter;
-import com.yuukidach.ucount.view.adapter.MoneyItemAdapter;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.yuukidach.ucount.callback.BookItemCallback;
 import com.yuukidach.ucount.callback.MainItemCallback;
 import com.yuukidach.ucount.model.BookItem;
@@ -35,6 +30,8 @@ import com.yuukidach.ucount.model.ImgUtils;
 import com.yuukidach.ucount.model.MoneyItem;
 import com.yuukidach.ucount.presenter.MainPresenter;
 import com.yuukidach.ucount.view.MainView;
+import com.yuukidach.ucount.view.adapter.BookItemAdapter;
+import com.yuukidach.ucount.view.adapter.MoneyItemAdapter;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -63,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     private static final String TAG = "MainActivity";
+
+    private EditText book_title;
+    private Button mBtnCancel, mBtnConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,29 +264,35 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void setNewBook() {
-        final EditText book_title = new EditText(MainActivity.this);
-        // 弹窗输入
+
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage(R.string.new_book_prompt);
+        final AlertDialog dialog = builder.create();
+        View dialogView = View.inflate(this, R.layout.dialog_newbooktitle, null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(false);
+        dialog.show();
 
-        builder.setView(book_title);
-
-        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+        book_title = (EditText) dialog.findViewById(R.id.et_bookTitle);
+        mBtnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        mBtnConfirm = (Button) dialog.findViewById(R.id.btn_confirm);
+        mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!book_title.getText().toString().isEmpty()) {
-                    mainPresenter.onAddBookConfirmClick(book_title.getText().toString());
-                    onResume();
+            public void onClick(View v) {
+                final String bookName = book_title.getText().toString();
+                if (!TextUtils.isEmpty(bookName)) {
+                    mainPresenter.onAddBookConfirmClick(bookName);
+                    dialog.dismiss();
                 } else {
-                    // TODO: use strings.xml
                     Toast.makeText(getApplicationContext(), "没有输入新账本名称哦", Toast.LENGTH_SHORT).show();
                 }
             }
-        }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+        });
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                dialog.dismiss();
             }
-        }).show();
+        });
     }
 
     @Override

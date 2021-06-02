@@ -1,7 +1,8 @@
 package com.yuukidach.ucount.callback;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +18,9 @@ public class BookItemCallback extends ItemTouchHelper.SimpleCallback {
     private Context context;
     private BookItemAdapter adapter;
     private RecyclerView recyclerView;
+
+    private Button mBtnConfirm;
+    private Button mBtnCancel;
 
     public BookItemCallback(Context context, RecyclerView recyclerView, BookItemAdapter adapter) {
         super(0, ItemTouchHelper.RIGHT);
@@ -48,27 +52,35 @@ public class BookItemCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+
         final int position = viewHolder.getBindingAdapterPosition();
 
         if (direction == ItemTouchHelper.RIGHT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.delete_item_alarm);
-
-            builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            final AlertDialog dialog = builder.create();
+            View dialogView = View.inflate(context, R.layout.dialog_common, null);
+            dialog.setView(dialogView);
+            dialog.setCancelable(false);
+            dialog.show();
+            mBtnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+            mBtnConfirm = (Button) dialog.findViewById(R.id.btn_confirm);
+            mBtnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(View v) {
                     adapter.removeItem(position);
-                    // refresh
-//                    adapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter);
-                }
-            }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
                     adapter.notifyDataSetChanged();
                     recyclerView.setAdapter(adapter);
+                    dialog.dismiss();
                 }
-            }).show();
+            });
+            mBtnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapter);
+                    dialog.dismiss();
+                }
+            });
         }
     }
 }

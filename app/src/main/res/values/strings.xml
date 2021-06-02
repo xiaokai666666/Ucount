@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ucount</string>
+    <string name="app_name">Scount</string>
     <string name="show_balance">Show Balance</string>
     <string name="monthly_income_title">Monthly Earn</string>
     <string name="monthly_expenditure_title">Monthly Cost</string>
