@@ -1,4 +1,4 @@
-# Ucount
+# Scount
 
 [![REAMDE](https://img.shields.io/badge/Language-Chinese-brightgreen)](README_zh.md)
 [![issues](https://img.shields.io/github/issues/yuukidach/Ucount)](https://github.com/yuukidach/Ucount/issues)
@@ -11,16 +11,11 @@ The purpose of writing this Android APP is to avoid bordering of ads. Every time
 ## Compiling
 
 If you want to compile the application by yourself, just download it and open with Android Studio with default settings, then click `run/debug`. The application with run on your selected devices.
-
 Or you can try to use the APK in the release page.
 
 ## Execution
 
 Install the application and click to run.
-
-## Application demo
-
-<img src="./markdown_res/ucount_demo.gif" width=400 />
 
 ### Tips
 
